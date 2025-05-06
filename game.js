@@ -354,6 +354,14 @@ function updatePlayerStats() {
     elements.playerStats.dmg.textContent = gameState.player.stats.dmg;
     elements.playerStats.def.textContent = gameState.player.stats.def + gameState.player.stats.tempDef;
     elements.playerStats.initiative.textContent = gameState.player.stats.initiative;
+
+    // Update player image based on HP
+    const playerImage = document.getElementById('player-image');
+    if (gameState.player.stats.hp <= 2) {
+        playerImage.src = 'assets/player_wounded.png';
+    } else {
+        playerImage.src = 'assets/player.png';
+    }
 }
 
 // Update enemy stats display
@@ -497,7 +505,7 @@ function handleEnemyDefeat() {
                 
                 // Complete the enemy defeat process
                 completeEnemyDefeat();
-            }, 500);
+            }, 4000); // Increased delay to 1.5 seconds to allow explosion to be more visible
             
             return; // Wait for explosion animation before continuing
         }
