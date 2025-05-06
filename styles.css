@@ -290,23 +290,51 @@ body {
 }
 
 #end-turn-btn {
-    background-color: #1a4a1a; /* Grim green */
-    box-shadow: 0 2px 4px rgba(0, 255, 0, 0.2);
+    background-color: #4a3a00; /* Rich dark yellow */
+    box-shadow: 0 2px 4px rgba(255, 200, 0, 0.3);
+    border: 1px solid rgba(255, 200, 0, 0.2);
 }
 
 #end-turn-btn:hover:not(:disabled) {
-    background-color: #2a5a2a;
-    box-shadow: 0 4px 8px rgba(0, 255, 0, 0.3);
+    background-color: #5a4a00;
+    box-shadow: 0 4px 8px rgba(255, 200, 0, 0.4);
+    border: 1px solid rgba(255, 200, 0, 0.3);
+    text-shadow: 0 0 5px rgba(255, 200, 0, 0.3);
 }
 
 #next-btn {
-    background-color: #4a1a1a; /* Grim red */
-    box-shadow: 0 2px 4px rgba(255, 0, 0, 0.2);
+    background-color: #4a0000; /* Deep blood red */
+    box-shadow: 0 2px 4px rgba(255, 0, 0, 0.3);
+    border: 1px solid rgba(255, 0, 0, 0.2);
 }
 
 #next-btn:hover:not(:disabled) {
-    background-color: #5a2a2a;
-    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+    background-color: #5a0000;
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.4);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+}
+
+#reset-btn {
+    background-color: #303030; /* Grim gray */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-top: 0px;
+}
+
+#reset-btn:hover {
+    background-color: #404040;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#how-to-play-btn {
+    background-color: #303030; /* Grim gray */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+}
+
+#how-to-play-btn:hover {
+    background-color: #404040;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .control-buttons button:disabled {
@@ -398,21 +426,14 @@ body {
 }
 
 /* Weapon card specific styles */
-.card[data-card-id*="Weapon"] {
+.card.weapon-range {
     background-color: #2a2a4a;
     box-shadow: 0 4px 8px rgba(0, 0, 255, 0.4);
 }
 
-/* Defense card specific styles */
-.card[data-card-id*="Defense"] {
+.card.weapon-attachment {
     background-color: #2a4a2a;
     box-shadow: 0 4px 8px rgba(0, 255, 0, 0.4);
-}
-
-/* Support card specific styles */
-.card[data-card-id*="Support"] {
-    background-color: #4a2a2a;
-    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.4);
 }
 
 /* Shake and flash animations for damage effects */
@@ -508,6 +529,47 @@ body {
 
 .modal-cards .card:hover {
     transform: scale(0.85);
+}
+
+.how-to-play-content {
+    padding: 20px;
+    color: #ffffff;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.how-to-play-content h3 {
+    color: #ff4444;
+    margin: 20px 0 10px 0;
+    font-size: 18px;
+}
+
+.how-to-play-content h3:first-child {
+    margin-top: 0;
+}
+
+.how-to-play-content p {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.how-to-play-content ul {
+    list-style-type: none;
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+
+.how-to-play-content li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+    position: relative;
+}
+
+.how-to-play-content li::before {
+    content: '•';
+    color: #ff4444;
+    position: absolute;
+    left: -15px;
 }
 
 /* Media Queries */
@@ -844,5 +906,72 @@ body {
     100% {
         transform: translate(var(--x), var(--y)) scale(0);
         opacity: 0;
+    }
+}
+
+/* Combo Indicators */
+.combo-indicator {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.combo-info {
+    margin-top: 4px;
+    font-size: 11px;
+    color: #ffd700;
+    text-align: center;
+}
+
+.combo-text {
+    background-color: rgba(255, 215, 0, 0.2);
+    padding: 2px 4px;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Combo state styles */
+.card.combo-ready {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    animation: pulse 1.5s infinite;
+}
+
+.card.combo-active {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    border: 2px solid rgba(255, 215, 0, 0.8);
+    animation: glow 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(255, 215, 0, 1);
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
     }
 } 

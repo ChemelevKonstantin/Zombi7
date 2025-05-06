@@ -335,9 +335,20 @@ function createCardElement(card) {
     cardElement.className = 'card';
     cardElement.dataset.cardId = card.name;
     
+    // Add combo-related classes based on card type
+    if (card.group === 'Weapon') {
+        if (card.subGroup === 'Range') {
+            cardElement.classList.add('weapon-range');
+        } else if (card.subGroup === 'Attachment') {
+            cardElement.classList.add('weapon-attachment');
+        }
+    }
+    
     const cardContent = `
         <div class="card-image">
             <img src="assets/${card.image}" alt="${card.name}">
+            ${card.group === 'Weapon' && card.subGroup === 'Range' ? '<div class="combo-indicator">🎯</div>' : ''}
+            ${card.group === 'Weapon' && card.subGroup === 'Attachment' ? '<div class="combo-indicator">🔧</div>' : ''}
         </div>
         <div class="card-content">
             <h3>${card.name}</h3>
@@ -351,6 +362,10 @@ function createCardElement(card) {
                 ${card.effect.dmg > 0 ? `<span>gain ⚔️+${card.effect.dmg}</span>` : ''}
                 ${card.effect.aoeDmg > 0 ? `<span>gain 💥+${card.effect.aoeDmg}</span>` : ''}
                 ${card.effect.def > 0 ? `<span>gain 🛡️+${card.effect.def}</span>` : ''}
+            </div>
+            <div class="combo-info">
+                ${card.group === 'Weapon' && card.subGroup === 'Range' ? '<span class="combo-text">Better with attachment</span>' : ''}
+                ${card.group === 'Weapon' && card.subGroup === 'Attachment' ? '<span class="combo-text">Attach to Range weapon</span>' : ''}
             </div>
             <button class="remove-card" title="Remove card from deck">❌</button>
         </div>
@@ -416,9 +431,42 @@ function playCard(card) {
     gameState.player.stats.ap -= card.cost.ap;
     gameState.player.stats.hp -= card.cost.hp;
 
+    // Check for combo
+    let comboBonus = 0;
+    if (card.group === 'Weapon' && card.subGroup === 'Range') {
+        gameState.comboState.rangeWeaponPlayed = true;
+        const cardElement = document.querySelector(`[data-card-id="${card.name}"]`);
+        if (cardElement) {
+            cardElement.classList.add('combo-ready');
+        }
+    }
+    
+    if (card.group === 'Weapon' && card.subGroup === 'Attachment' && gameState.comboState.rangeWeaponPlayed) {
+        gameState.comboState.attachmentPlayed = true;
+        gameState.comboState.comboActive = true;
+        comboBonus = 2;
+        
+        // Add combo indicators
+        const cardElement = document.querySelector(`[data-card-id="${card.name}"]`);
+        if (cardElement) {
+            cardElement.classList.add('combo-active');
+        }
+        
+        // Find and highlight the range weapon card
+        const rangeCard = gameState.player.hand.find(c => c.group === 'Weapon' && c.subGroup === 'Range');
+        if (rangeCard) {
+            const rangeCardElement = document.querySelector(`[data-card-id="${rangeCard.name}"]`);
+            if (rangeCardElement) {
+                rangeCardElement.classList.add('combo-active');
+            }
+        }
+        
+        addToGameLog("Combo achieved! +2 DMG from weapon attachment!");
+    }
+
     // Apply effects
     if (card.effect.dmg > 0) {
-        const totalDamage = card.effect.dmg + gameState.player.stats.dmg;
+        const totalDamage = card.effect.dmg + gameState.player.stats.dmg + comboBonus;
         const damage = Math.max(0, totalDamage - gameState.enemy.stats.def);
         gameState.enemy.stats.hp -= damage;
         addToGameLog(`Dealt ${damage} damage to ${gameState.enemy.name}!`);
@@ -440,10 +488,19 @@ function playCard(card) {
     }
 
     if (card.effect.aoeDmg > 0) {
-        const totalDamage = card.effect.aoeDmg + gameState.player.stats.dmg;
+        const totalDamage = card.effect.aoeDmg + gameState.player.stats.dmg + comboBonus;
         const aoeDamage = Math.max(0, totalDamage - gameState.enemy.stats.def);
         gameState.enemy.stats.hp -= aoeDamage;
         addToGameLog(`Dealt ${aoeDamage} AOE damage to ${gameState.enemy.name}!`);
+    }
+
+    // Reset combo state at the end of turn
+    if (card.group === 'Weapon' && card.subGroup === 'Attachment') {
+        gameState.comboState = {
+            rangeWeaponPlayed: false,
+            attachmentPlayed: false,
+            comboActive: false
+        };
     }
 
     // Update displays

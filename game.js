@@ -32,7 +32,12 @@ const gameState = {
         },
         image: "enemy.png"
     },
-    isPlayerTurn: true
+    isPlayerTurn: true,
+    comboState: {
+        rangeWeaponPlayed: false,
+        attachmentPlayed: false,
+        comboActive: false
+    }
 };
 
 // DOM Elements
@@ -560,9 +565,42 @@ function playCard(card) {
     gameState.player.stats.ap -= card.cost.ap;
     gameState.player.stats.hp -= card.cost.hp;
 
+    // Check for combo
+    let comboBonus = 0;
+    if (card.group === 'Weapon' && card.subGroup === 'Range') {
+        gameState.comboState.rangeWeaponPlayed = true;
+        const cardElement = document.querySelector(`[data-card-id="${card.id}"]`);
+        if (cardElement) {
+            cardElement.classList.add('combo-ready');
+        }
+    }
+    
+    if (card.group === 'Weapon' && card.subGroup === 'Attachment' && gameState.comboState.rangeWeaponPlayed) {
+        gameState.comboState.attachmentPlayed = true;
+        gameState.comboState.comboActive = true;
+        comboBonus = 2;
+        
+        // Add combo indicators
+        const cardElement = document.querySelector(`[data-card-id="${card.id}"]`);
+        if (cardElement) {
+            cardElement.classList.add('combo-active');
+        }
+        
+        // Find and highlight the range weapon card
+        const rangeCard = gameState.player.hand.find(c => c.group === 'Weapon' && c.subGroup === 'Range');
+        if (rangeCard) {
+            const rangeCardElement = document.querySelector(`[data-card-id="${rangeCard.id}"]`);
+            if (rangeCardElement) {
+                rangeCardElement.classList.add('combo-active');
+            }
+        }
+        
+        addToGameLog("Combo achieved! +2 DMG from weapon attachment!");
+    }
+
     // Apply effects
     if (card.effect.dmg > 0) {
-        const totalDamage = card.effect.dmg + gameState.player.stats.dmg;
+        const totalDamage = card.effect.dmg + gameState.player.stats.dmg + comboBonus;
         const damage = Math.max(0, totalDamage - gameState.enemy.stats.def);
         gameState.enemy.stats.hp -= damage;
         addToGameLog(`Dealt ${damage} damage to ${gameState.enemy.name}!`);
@@ -584,10 +622,19 @@ function playCard(card) {
     }
 
     if (card.effect.aoeDmg > 0) {
-        const totalDamage = card.effect.aoeDmg + gameState.player.stats.dmg;
+        const totalDamage = card.effect.aoeDmg + gameState.player.stats.dmg + comboBonus;
         const aoeDamage = Math.max(0, totalDamage - gameState.enemy.stats.def);
         gameState.enemy.stats.hp -= aoeDamage;
         addToGameLog(`Dealt ${aoeDamage} AOE damage to ${gameState.enemy.name}!`);
+    }
+
+    // Reset combo state at the end of turn
+    if (card.group === 'Weapon' && card.subGroup === 'Attachment') {
+        gameState.comboState = {
+            rangeWeaponPlayed: false,
+            attachmentPlayed: false,
+            comboActive: false
+        };
     }
 
     // Update displays
@@ -640,6 +687,34 @@ window.addEventListener('click', (event) => {
 
 // Initialize the game when the page loads
 window.addEventListener('load', initGame);
+
+// Add reset button functionality
+document.getElementById('reset-btn').addEventListener('click', () => {
+    if (confirm('Are you sure you want to reset the game? All progress will be lost.')) {
+        initGame();
+    }
+});
+
+// Add How to Play button functionality
+document.getElementById('how-to-play-btn').addEventListener('click', () => {
+    const modal = document.getElementById('how-to-play-modal');
+    modal.style.display = 'block';
+});
+
+// Update modal close functionality to handle both modals
+document.querySelectorAll('.close-modal').forEach(closeBtn => {
+    closeBtn.addEventListener('click', () => {
+        const modal = closeBtn.closest('.modal');
+        modal.style.display = 'none';
+    });
+});
+
+// Close modals when clicking outside
+window.addEventListener('click', (event) => {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+    }
+});
 
 function updateDayCount() {
     elements.dayCount.textContent = gameState.day;

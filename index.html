@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZombieZ Combat Card Game</title>
+    <title>Zombi7</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -51,6 +51,8 @@
                     <div class="control-buttons">
                         <button id="end-turn-btn">End Turn</button>
                         <button id="next-btn">Next</button>
+                        <button id="how-to-play-btn">How to Play</button>
+                        <button id="reset-btn">Reset Game</button>
                     </div>
                 </div>
 
@@ -97,6 +99,49 @@
                 <span class="close-modal">&times;</span>
             </div>
             <div id="modal-cards" class="modal-cards"></div>
+        </div>
+    </div>
+
+    <!-- How to Play Modal -->
+    <div id="how-to-play-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>How to Play</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="how-to-play-content">
+                <h3>Game Overview</h3>
+                <p>Survive 7 days in a zombie-infested world. Each day brings new challenges and enemies.</p>
+                
+                <h3>Basic Rules</h3>
+                <ul>
+                    <li>You start with 7 HP and 3 AP (Action Points) per turn</li>
+                    <li>Draw 3 cards at the start of your turn</li>
+                    <li>Use cards to attack enemies, heal, or gain defense</li>
+                    <li>Defeat enemies to gain rewards and progress to the next day</li>
+                </ul>
+
+                <h3>Card Types</h3>
+                <ul>
+                    <li>⚔️ Attack Cards: Deal damage to enemies</li>
+                    <li>🛡️ Defense Cards: Block incoming damage</li>
+                    <li>❤️ Support Cards: Heal or provide special effects</li>
+                </ul>
+
+                <h3>Enemy Types</h3>
+                <ul>
+                    <li>Regular Zombies: Basic enemies with different abilities</li>
+                    <li>Special Enemies: Have unique effects (like exploding when defeated)</li>
+                    <li>Boss: Appears on day 7 - the final challenge!</li>
+                </ul>
+
+                <h3>Tips</h3>
+                <ul>
+                    <li>Manage your AP carefully - each card costs AP to play</li>
+                    <li>Build up your defense before taking on stronger enemies</li>
+                    <li>Watch out for special enemy effects!</li>
+                </ul>
+            </div>
         </div>
     </div>
 
