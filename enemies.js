@@ -106,10 +106,14 @@ const enemyCards = [
         def: 0,
         attacksPerTurn: 1,
         initiative: 1,
+        onDeath: {
+            effect: 'explode',
+            damage: 2
+        },
         reward: {
             hp: 1,
             dmg: 0,
-            def: 0,
+            def: 1,
             items: 2
         },
         image: 'Bloated.png'

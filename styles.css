@@ -758,4 +758,91 @@ body {
 .player-stats .stat.increased {
     animation: stat-increase 0.5s ease-in-out;
     color: #44ff44;
+}
+
+/* Explosion animation */
+@keyframes explode {
+    0% { 
+        transform: scale(1);
+        opacity: 1;
+        filter: brightness(1);
+    }
+    20% { 
+        transform: scale(1.2);
+        opacity: 0.8;
+        filter: brightness(1.5);
+    }
+    40% { 
+        transform: scale(1.4);
+        opacity: 0.6;
+        filter: brightness(2);
+    }
+    60% { 
+        transform: scale(1.6);
+        opacity: 0.4;
+        filter: brightness(2.5);
+    }
+    80% { 
+        transform: scale(1.8);
+        opacity: 0.2;
+        filter: brightness(3);
+    }
+    100% { 
+        transform: scale(2);
+        opacity: 0;
+        filter: brightness(4);
+    }
+}
+
+@keyframes explosion-flash {
+    0% { background-color: #2a2a2a; }
+    20% { background-color: #ff4400; }
+    40% { background-color: #ff8800; }
+    60% { background-color: #ff4400; }
+    80% { background-color: #ff8800; }
+    100% { background-color: #2a2a2a; }
+}
+
+.enemy-card.exploding {
+    animation: explode 1s ease-out forwards, explosion-flash 1s ease-out;
+    z-index: 1000;
+}
+
+.enemy-card.exploding .card-image {
+    filter: brightness(2) contrast(1.5);
+}
+
+.enemy-card.exploding .card-content {
+    color: #ff4400;
+}
+
+/* Explosion particles */
+.explosion-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+}
+
+.explosion-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: #ff4400;
+    border-radius: 50%;
+    animation: particle-fly 1s ease-out forwards;
+}
+
+@keyframes particle-fly {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x), var(--y)) scale(0);
+        opacity: 0;
+    }
 } 

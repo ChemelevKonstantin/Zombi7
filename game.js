@@ -204,11 +204,11 @@ function enemyTurn() {
         if (damage > 0) {
             addToGameLog(`${enemy.name} attacks for ${damage} damage!`);
             playerCard.classList.add('shake');
-            setTimeout(() => playerCard.classList.remove('shake'), 500);
+            setTimeout(() => playerCard.classList.remove('shake'), 5000);
         } else {
             addToGameLog(`${enemy.name}'s attack was blocked by your defense!`);
             playerCard.classList.add('block');
-            setTimeout(() => playerCard.classList.remove('block'), 500);
+            setTimeout(() => playerCard.classList.remove('block'), 5000);
         }
         
         // Update player stats after each attack
@@ -279,23 +279,23 @@ function nextEncounter() {
     // Add visual feedback for rewards
     const playerCard = document.querySelector('.player-card');
     playerCard.classList.add('reward');
-    setTimeout(() => playerCard.classList.remove('reward'), 3000);
+    setTimeout(() => playerCard.classList.remove('reward'), 5000);
     
     // Add visual feedback for stat increases
     if (reward.hp > 0) {
         const hpStat = elements.playerStats.hp.parentElement;
         hpStat.classList.add('increased');
-        setTimeout(() => hpStat.classList.remove('increased'), 3000);
+        setTimeout(() => hpStat.classList.remove('increased'), 5000);
     }
     if (reward.dmg > 0) {
         const dmgStat = elements.playerStats.dmg.parentElement;
         dmgStat.classList.add('increased');
-        setTimeout(() => dmgStat.classList.remove('increased'), 3000);
+        setTimeout(() => dmgStat.classList.remove('increased'), 5000);
     }
     if (reward.def > 0) {
         const defStat = elements.playerStats.def.parentElement;
         defStat.classList.add('increased');
-        setTimeout(() => defStat.classList.remove('increased'), 3000);
+        setTimeout(() => defStat.classList.remove('increased'), 5000);
     }
     
     // Add unique item rewards to deck
@@ -415,12 +415,12 @@ function addToGameLog(message) {
             // Player dealt damage to enemy
             const enemyCard = document.querySelector('.enemy-card');
             enemyCard.classList.add('shake');
-            setTimeout(() => enemyCard.classList.remove('shake'), 500);
+            setTimeout(() => enemyCard.classList.remove('shake'), 5000);
         } else if (message.includes('attacks')) {
             // Enemy dealt damage to player
             const playerCard = document.querySelector('.player-card');
             playerCard.classList.add('shake');
-            setTimeout(() => playerCard.classList.remove('shake'), 500);
+            setTimeout(() => playerCard.classList.remove('shake'), 5000);
         }
     } else if (message.includes('healed') || message.includes('Healed')) {
         logEntry.innerHTML = `💚 ${message}`;
@@ -441,6 +441,73 @@ function addToGameLog(message) {
 
 // Handle enemy defeat
 function handleEnemyDefeat() {
+    // Check for death effects before setting HP to 0
+    const enemy = enemyCards.find(e => e.name === gameState.enemy.name);
+    
+    if (enemy && enemy.onDeath) {
+        if (enemy.onDeath.effect === 'explode') {
+            // Add explosion effects
+            const enemyCard = document.querySelector('.enemy-card');
+            enemyCard.classList.add('exploding');
+            
+            // Create explosion particles
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'explosion-particles';
+            enemyCard.appendChild(particlesContainer);
+            
+            // Add particles
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'explosion-particle';
+                // Random direction for each particle
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 100 + Math.random() * 100;
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+                particle.style.setProperty('--x', `${x}px`);
+                particle.style.setProperty('--y', `${y}px`);
+                particlesContainer.appendChild(particle);
+            }
+            
+            // Apply explosion damage to player after a short delay
+            setTimeout(() => {
+                gameState.player.stats.hp -= enemy.onDeath.damage;
+                addToGameLog(`💥 ${gameState.enemy.name} exploded, dealing ${enemy.onDeath.damage} damage!`);
+                
+                // Add explosion animation to player card
+                const playerCard = document.querySelector('.player-card');
+                playerCard.classList.add('shake');
+                setTimeout(() => playerCard.classList.remove('shake'), 5000);
+                
+                // Update player stats
+                updatePlayerStats();
+                
+                // Check if player is defeated
+                if (gameState.player.stats.hp <= 0) {
+                    gameState.player.stats.hp = 0;
+                    updatePlayerStats();
+                    playerCard.classList.add('defeated');
+                    gameOver();
+                    return;
+                }
+                
+                // Remove explosion effects
+                enemyCard.classList.remove('exploding');
+                particlesContainer.remove();
+                
+                // Complete the enemy defeat process
+                completeEnemyDefeat();
+            }, 500);
+            
+            return; // Wait for explosion animation before continuing
+        }
+    }
+    
+    completeEnemyDefeat();
+}
+
+// New function to handle the completion of enemy defeat
+function completeEnemyDefeat() {
     gameState.enemy.stats.hp = 0;
     gameState.isPlayerTurn = false;
     addToGameLog(`${gameState.enemy.name} defeated!`);
