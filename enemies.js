@@ -168,7 +168,7 @@ const enemyCards = [
         attacksPerTurn: 1,
         initiative: 1,
         reward: {
-            hp: 3,
+            hp: 5,
             dmg: 0,
             def: 0,
             items: 5

@@ -68,6 +68,10 @@ function initGame() {
     // Create initial deck
     createInitialDeck();
     
+    // Initialize day count
+    gameState.day = 1;
+    updateDayCount();
+    
     // Start first encounter
     startEncounter();
     
@@ -113,7 +117,7 @@ function startEncounter() {
     
     // Set up enemy based on day
     let enemy;
-    if (gameState.day === 5) {
+    if (gameState.day === 7) {
         enemy = enemySystem.getBossEnemy();
     } else {
         const enemyLevel = Math.min(Math.floor(gameState.day / 2) + 1, 3);
@@ -329,7 +333,7 @@ function nextEncounter() {
     gameState.day++;
     updateDayCount();
     
-    if (gameState.day > 5) {
+    if (gameState.day > 7) {
         addToGameLog("Game Over! You've completed all encounters!");
         return;
     }
@@ -639,5 +643,6 @@ window.addEventListener('load', initGame);
 
 function updateDayCount() {
     elements.dayCount.textContent = gameState.day;
-    document.documentElement.style.setProperty('--current-day', gameState.day);
+    // Ensure the day count starts from 1 for the progress bar
+    document.documentElement.style.setProperty('--current-day', Math.max(1, gameState.day));
 } 
