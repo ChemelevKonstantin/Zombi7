@@ -19,52 +19,62 @@
         <div class="game-area">
             <!-- Player Section -->
             <div class="player-section">
-                <div class="player-card">
-                    <div class="card-image">
-                        <img src="assets/player.png" alt="Player" id="player-image">
-                    </div>
-                    <div class="card-content">
-                        <h2 id="player-name">Survivor</h2>
-                        <div class="player-stats">
-                            <div class="stat">✳️ AP: <span id="player-ap">3</span></div>
-                            <div class="stat">❤️ HP: <span id="player-hp">7</span></div>
-                            <div class="stat">⚔️ DMG: <span id="player-dmg">1</span></div>
-                            <div class="stat">🛡️ DEF: <span id="player-def">0</span></div>
-                            <div class="stat">⚡INI: <span id="player-initiative">2</span></div>
+                <div class="player-left">
+                    <div class="player-card">
+                        <div class="card-image">
+                            <img src="assets/player.png" alt="Player" id="player-image">
                         </div>
+                        <div class="card-content">
+                            <h2 id="player-name">Survivor</h2>
+                            <div class="player-stats">
+                                <div class="stat">⚡ AP: <span id="player-ap">3</span></div>
+                                <div class="stat">❤️ HP: <span id="player-hp">7</span></div>
+                                <div class="stat">⚔️ DMG: <span id="player-dmg">1</span></div>
+                                <div class="stat">🛡️ DEF: <span id="player-def">0</span></div>
+                                <div class="stat">⏩ INI: <span id="player-initiative">2</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="player-piles">
+                        <div class="card-pile deck-pile">
+                            <h3>Backpack</h3>
+                            <div class="pile-count" id="deck-count">5</div>
+                        </div>
+
+                        <div class="card-pile discard-pile">
+                            <h3>Discard</h3>
+                            <div class="pile-count" id="discard-count">0</div>
+                        </div>
+                    </div>
+
+                    <div class="control-buttons">
+                        <button id="end-turn-btn">End Turn</button>
+                        <button id="next-btn">Next</button>
                     </div>
                 </div>
 
-                <div class="player-cards-area">
-                    <div class="card-pile deck-pile">
-                        <h3>Deck</h3>
-                        <div class="pile-count" id="deck-count">5</div>
-                    </div>
+                <div class="player-right">
                     <div class="card-pile hand-pile">
                         <h3>Hand</h3>
                         <div class="cards-container" id="player-hand"></div>
                     </div>
-                    <div class="card-pile discard-pile">
-                        <h3>Discard</h3>
-                        <div class="pile-count" id="discard-count">0</div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Enemy Section -->
-            <div class="enemy-section">
-                <div class="enemy-card">
-                    <div class="card-image">
-                        <img src="assets/enemy.png" alt="Enemy" id="enemy-image">
-                    </div>
-                    <div class="card-content">
-                        <h2 id="enemy-name">Enemy</h2>
-                        <div class="enemy-stats">
-                            <div class="stat">❤️ HP: <span id="enemy-hp">0</span></div>
-                            <div class="stat">⚔️ DMG: <span id="enemy-dmg">0</span></div>
-                            <div class="stat">🛡️ DEF: <span id="enemy-def">0</span></div>
-                            <div class="stat">⚡INI: <span id="enemy-initiative">0</span></div>
-                            <div class="stat">⚔️🔄 Atk/Turn: <span id="enemy-attacks">0</span></div>
+                    <div class="enemy-section">
+                        <div class="enemy-card">
+                            <div class="card-image">
+                                <img src="assets/enemy.png" alt="Enemy" id="enemy-image">
+                            </div>
+                            <div class="card-content">
+                                <h2 id="enemy-name">Enemy</h2>
+                                <div class="enemy-stats">
+                                    <div class="stat">❤️ HP: <span id="enemy-hp">0</span></div>
+                                    <div class="stat">⚔️ DMG: <span id="enemy-dmg">0</span></div>
+                                    <div class="stat">🛡️ DEF: <span id="enemy-def">0</span></div>
+                                    <div class="stat">⏩ INI: <span id="enemy-initiative">0</span></div>
+                                    <div class="stat">⚔️🔄 Atk/Turn: <span id="enemy-attacks">0</span></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -73,18 +83,25 @@
 
         <!-- Game Controls -->
         <div class="game-controls">
-            <div class="game-log" id="game-log">
-                <h3>Game Log</h3>
+            <div class="game-log">
                 <div class="log-content"></div>
-            </div>
-            <div class="control-buttons">
-                <button id="end-turn-btn">END TURN</button>
-                <button id="next-btn">NEXT</button>
             </div>
         </div>
     </div>
-    <script src="enemies.js"></script>
+
+    <!-- Card Pile Modal -->
+    <div id="pile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Cards</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div id="modal-cards" class="modal-cards"></div>
+        </div>
+    </div>
+
     <script src="items.js"></script>
+    <script src="enemies.js"></script>
     <script src="game.js"></script>
 </body>
 </html> 

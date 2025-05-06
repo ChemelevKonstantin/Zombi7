@@ -10,10 +10,12 @@ const enemyCards = [
         dmg: 1,
         def: 0,
         attacksPerTurn: 1,
-        initiative: 3,
+        initiative: 1,
         reward: {
             hp: 1,
-            dmg: 0
+            dmg: 0,
+            def: 0,
+            items: 1
         },
         image: 'Dead Boar.png'
     },
@@ -27,10 +29,12 @@ const enemyCards = [
         dmg: 1,
         def: 0,
         attacksPerTurn: 1,
-        initiative: 3,
+        initiative: 1,
         reward: {
             hp: 1,
-            dmg: 0
+            dmg: 0,
+            def: 0,
+            items: 1
         },
         image: 'Dead Dog.png'
     },
@@ -44,10 +48,12 @@ const enemyCards = [
         dmg: 1,
         def: 0,
         attacksPerTurn: 2,
-        initiative: 1,
+        initiative: 3,
         reward: {
             hp: 1,
-            dmg: 0
+            dmg: 0,
+            def: 0,
+            items: 1
         },
         image: 'Runner.png'
     },
@@ -61,10 +67,12 @@ const enemyCards = [
         dmg: 1,
         def: 0,
         attacksPerTurn: 1,
-        initiative: 3,
+        initiative: 1,
         reward: {
             hp: 1,
-            dmg: 0
+            dmg: 0,
+            def: 0,
+            items: 1
         },
         image: 'Walker.png'
     },
@@ -78,10 +86,12 @@ const enemyCards = [
         dmg: 2,
         def: 1,
         attacksPerTurn: 1,
-        initiative: 3,
+        initiative: 1,
         reward: {
             hp: 1,
-            dmg: 1
+            dmg: 1,
+            def: 0,
+            items: 2
         },
         image: 'Dead Bear.png'
     },
@@ -95,10 +105,12 @@ const enemyCards = [
         dmg: 2,
         def: 0,
         attacksPerTurn: 1,
-        initiative: 3,
+        initiative: 1,
         reward: {
             hp: 1,
-            dmg: 0
+            dmg: 0,
+            def: 0,
+            items: 2
         },
         image: 'Bloated.png'
     },
@@ -112,10 +124,12 @@ const enemyCards = [
         dmg: 2,
         def: 0,
         attacksPerTurn: 1,
-        initiative: 3,
+        initiative: 1,
         reward: {
             hp: 1,
-            dmg: 0
+            dmg: 0,
+            def: 0,
+            items: 2
         },
         image: 'Lurker.png'
     },
@@ -129,10 +143,12 @@ const enemyCards = [
         dmg: 3,
         def: 1,
         attacksPerTurn: 1,
-        initiative: 3,
+        initiative: 1,
         reward: {
             hp: 2,
-            dmg: 1
+            dmg: 1,
+            def: 1,
+            items: 3
         },
         image: 'Tank.png'
     },
@@ -146,10 +162,12 @@ const enemyCards = [
         dmg: 4,
         def: 2,
         attacksPerTurn: 1,
-        initiative: 3,
+        initiative: 1,
         reward: {
             hp: 3,
-            dmg: 0
+            dmg: 0,
+            def: 0,
+            items: 5
         },
         image: 'Juggernaut.png'
     }
